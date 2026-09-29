@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --font-pixel: "Pixelify Sans", ui-monospace, Menlo, monospace;
+  --color-ink: #1e1a17;
+  --color-cream: #f3e6d0;
+  --color-tomato: #c8452c;
+  --color-tomato-dark: #7d2a1a;
+  --color-mustard: #e8b44a;
+  --color-panel: #2a2420;
+  --color-line: #4a3f37;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: var(--color-ink);
+  overflow: hidden;
+}
+
+button, textarea {
+  font: inherit;
+}
