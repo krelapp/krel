@@ -188,12 +188,17 @@ const KREL_GLYPHS = {
   K: ["#...#", "#..#.", "#.#..", "##...", "#.#..", "#..#.", "#...#"],
   R: ["####.", "#...#", "#...#", "####.", "#.#..", "#..#.", "#...#"],
   E: ["#####", "#....", "#....", "####.", "#....", "#....", "#####"],
-  L: ["#....", "#....", "#....", "#....", "#....", "#....", "#####"]
+  L: ["#....", "#....", "#....", "#....", "#....", "#....", "#####"],
+  C: ["####.", "#...#", "#....", "#....", "#....", "#...#", "####."],
+  A: [".###.", "#...#", "#...#", "#####", "#...#", "#...#", "#...#"],
+  O: [".###.", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."],
+  P: ["####.", "#...#", "#...#", "####.", "#....", "#....", "#...."],
+  Y: ["#...#", "#...#", ".#.#.", "..#..", "..#..", "..#..", "..#.."]
 };
 
-function paintKrel(g, scale, x0, y0, ink) {
+function paintWord(g, word, scale, x0, y0, ink) {
   let x = x0;
-  for (const ch of "KREL") {
+  for (const ch of word) {
     KREL_GLYPHS[ch].forEach((row, ry) => {
       [...row].forEach((bit, rx) => {
         if (bit === "#") px(g, x + rx * scale, y0 + ry * scale, scale, scale, ink);
@@ -203,11 +208,24 @@ function paintKrel(g, scale, x0, y0, ink) {
   }
 }
 
+function paintKrel(g, scale, x0, y0, ink) {
+  paintWord(g, "KREL", scale, x0, y0, ink);
+}
+
 const krelTex = canvasTex(120, 32, (g, w, h) => {
   px(g, 0, 0, w, h, "#1e1a17");
   px(g, 3, 3, w - 6, h - 6, "#c8452c");
   px(g, 6, 6, w - 12, h - 12, "#f3e6d0");
   paintKrel(g, 2, 37, 9, "#1e1a17");
+}, { wrap: false, mip: false });
+
+const caTex = canvasTex(64, 40, (g, w, h) => {
+  px(g, 0, 0, w, h, "#1e1a17");
+  px(g, 3, 3, w - 6, h - 6, "#c8452c");
+  px(g, 5, 5, w - 10, 20, "#f3e6d0");
+  paintWord(g, "CA", 2, 21, 7, "#1e1a17");
+  px(g, 5, 26, w - 10, 11, "#e8b44a");
+  paintWord(g, "COPY", 1, 20, 28, "#1e1a17");
 }, { wrap: false, mip: false });
 
 const stillTex = canvasTex(128, 24, (g, w, h) => {
@@ -876,6 +894,30 @@ function buildBoard() {
   });
 }
 
+function buildCaButton() {
+  const g = group(8.82, 1.72);
+  g.rotation.y = -Math.PI / 2;
+  box(g, 0.92, 0.7, 0.05, M(C.ink), 0, 1.08, 0.02);
+  plane(g, 0.82, 0.58, Basic(0xffffff, { map: caTex }), 0, 1.43, 0.048);
+  hitbox(g, 1.1, 0.9, 0.45, 0, 1.05, 0.12);
+  return interactive("ca", g, {
+    prompt: () => "Copy the contract address",
+    action(api) {
+      const ca = config.ca;
+      const copied = navigator.clipboard?.writeText(ca);
+      api.sfx("blip");
+      if (copied) {
+        copied.then(
+          () => api.toast("Copied the contract address."),
+          () => api.toast(ca, 5000)
+        );
+      } else {
+        api.toast(ca, 5000);
+      }
+    }
+  });
+}
+
 function buildSocket() {
   const g = group(8.3, 0.03);
   const dark = M(C.metal);
@@ -1336,6 +1378,7 @@ function buildOffice() {
   buildRadio();
   buildClock();
   buildBoard();
+  buildCaButton();
   buildSocket();
   buildShelf();
   buildPlant("plantA", 11.95, 0.35);
