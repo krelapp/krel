@@ -572,6 +572,7 @@ function syncRemotes(dt) {
     r.g.position.z += (r.z - r.g.position.z) * k;
     r.g.position.y += ((sitting ? 0.48 : 0) - r.g.position.y) * k;
     r.g.rotation.y = r.yaw;
+    r.g.visible = Math.hypot(r.x - player.x, r.z - player.z) > 0.6;
     const u = r.g.userData;
     if (u.stand) u.stand.visible = !sitting;
     if (u.seated) u.seated.visible = sitting;
@@ -1485,7 +1486,7 @@ function updateParticles(dt) {
 
 // ---------- pemain ----------
 
-const player = { x: 6.5, z: 6.3, yaw: 0, pitch: -0.05, bob: 0, backX: 0, backZ: 0 };
+const player = { x: 4.6, z: 3.6, yaw: 0, pitch: -0.05, bob: 0, backX: 0, backZ: 0 };
 const PR = 0.25;
 const keys = new Set();
 

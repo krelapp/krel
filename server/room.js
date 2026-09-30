@@ -1,8 +1,13 @@
 import { WebSocketServer } from "ws";
 
 const MAX = 20;
+const Z_MAX = 12.1;
 const SPAWNS = [
-  [6.5, 6.3], [5.5, 6.3], [7.5, 6.3], [6.5, 5.4], [5.5, 5.4]
+  [3.4, 3.2],
+  [4.6, 3.8],
+  [6.5, 3.4],
+  [4.0, 5.0],
+  [7.6, 4.2]
 ];
 const SOFA = {
   1: { x: 10.58, z: 3.88, yaw: Math.PI },
@@ -75,6 +80,20 @@ export function attachRoom(httpServer) {
     p.yaw = s.yaw;
   };
 
+  const pickSpawn = () => {
+    for (const spot of SPAWNS) {
+      let free = true;
+      for (const p of people.values()) {
+        if (Math.hypot(p.x - spot[0], p.z - spot[1]) < 0.8) {
+          free = false;
+          break;
+        }
+      }
+      if (free) return spot;
+    }
+    return SPAWNS[(seq - 1) % SPAWNS.length];
+  };
+
   wss.on("connection", (ws) => {
     if (people.size >= MAX) {
       send(ws, { type: "full" });
@@ -83,7 +102,7 @@ export function attachRoom(httpServer) {
     }
 
     const id = String(seq++);
-    const [x, z] = SPAWNS[(seq - 2) % SPAWNS.length];
+    const [x, z] = pickSpawn();
     const me = { ws, id, x, z, yaw: 0, sit: 0 };
     people.set(id, me);
     send(ws, { type: "hello", id, x, z, others: snapshot(id), world: { ...world } });
@@ -137,7 +156,7 @@ export function attachRoom(httpServer) {
         park(me, me.sit);
       } else {
         me.x = Math.min(13, Math.max(0, nx));
-        me.z = Math.min(7.5, Math.max(0, nz));
+        me.z = Math.min(Z_MAX, Math.max(0, nz));
         me.yaw = yaw;
         me.sit = 0;
       }
