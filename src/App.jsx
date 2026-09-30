@@ -29,6 +29,19 @@ function Cta({ children, onClick }) {
   );
 }
 
+function BrandLogo({ size = 48, className = "" }) {
+  return (
+    <img
+      src="/krel-pfp.png"
+      alt="KREL"
+      width={size}
+      height={size}
+      draggable={false}
+      className={`rounded-full [image-rendering:pixelated] select-none ${className}`}
+    />
+  );
+}
+
 function HudButton({ children, onClick, title }) {
   return (
     <button
@@ -221,7 +234,7 @@ export default function App() {
       {hud && (
         <div className="pointer-events-none absolute inset-0 z-10">
           <div className="absolute top-3 right-3 left-3 flex items-center justify-between">
-            <div className="text-lg font-bold [text-shadow:2px_2px_0_#c8452c]">{config.studioName}</div>
+            <BrandLogo size={44} className="pointer-events-auto" />
             <div className="flex gap-2">
               <HudButton title="Sound (M)" onClick={(e) => { office()?.toggleSound(); e.currentTarget.blur(); }}>
                 Sound: {muted ? "OFF" : "ON"}
@@ -277,7 +290,7 @@ export default function App() {
 
       {loaderOn && (
         <div className={`absolute inset-0 z-40 flex flex-col items-center justify-center gap-5 bg-ink p-6 text-center transition-opacity duration-500 ${loaderFade ? "pointer-events-none opacity-0" : ""}`}>
-          <p className="text-[clamp(34px,6vw,60px)] font-bold tracking-wide [text-shadow:4px_4px_0_#c8452c]">{config.studioName}</p>
+          <BrandLogo size={168} />
           <div className="h-3.5 w-[min(320px,80vw)] border-[3px] border-cream p-0.5">
             <div className="h-full bg-tomato transition-[width] duration-200" style={{ width: `${load.pct}%` }} />
           </div>
@@ -289,8 +302,8 @@ export default function App() {
 
       {phase === "intro" && (
         <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-5 p-6 text-center">
-          <p className="text-[clamp(34px,6vw,60px)] font-bold tracking-wide [text-shadow:4px_4px_0_#c8452c]">{config.studioName}</p>
-          <p className="-mt-2 max-w-[440px] text-[17px] opacity-85">{config.tagline}</p>
+          <BrandLogo size={168} />
+          <p className="-mt-1 max-w-[440px] text-[17px] opacity-85">{config.tagline}</p>
           <ul className="grid min-w-[min(360px,92vw)] gap-2.5 border-[3px] border-cream bg-ink/90 px-5 py-4 text-left shadow-[6px_6px_0_#c8452c]">
             <li className="flex items-center gap-3 text-base"><Keys><Kbd>W</Kbd><Kbd>A</Kbd><Kbd>S</Kbd><Kbd>D</Kbd></Keys> Walk · arrow keys work too</li>
             <li className="flex items-center gap-3 text-base"><Keys><Kbd>Mouse</Kbd></Keys> Look around</li>
