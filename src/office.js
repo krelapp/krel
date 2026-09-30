@@ -219,13 +219,11 @@ const krelTex = canvasTex(120, 32, (g, w, h) => {
   paintKrel(g, 2, 37, 9, "#1e1a17");
 }, { wrap: false, mip: false });
 
-const caTex = canvasTex(64, 40, (g, w, h) => {
+const caTex = canvasTex(48, 32, (g, w, h) => {
   px(g, 0, 0, w, h, "#1e1a17");
-  px(g, 3, 3, w - 6, h - 6, "#c8452c");
-  px(g, 5, 5, w - 10, 20, "#f3e6d0");
-  paintWord(g, "CA", 2, 21, 7, "#1e1a17");
-  px(g, 5, 26, w - 10, 11, "#e8b44a");
-  paintWord(g, "COPY", 1, 20, 28, "#1e1a17");
+  px(g, 2, 2, w - 4, h - 4, "#c8452c");
+  px(g, 4, 4, w - 8, h - 8, "#f3e6d0");
+  paintWord(g, "CA", 3, 7, 5, "#1e1a17");
 }, { wrap: false, mip: false });
 
 const stillTex = canvasTex(128, 24, (g, w, h) => {
@@ -895,11 +893,11 @@ function buildBoard() {
 }
 
 function buildCaButton() {
-  const g = group(8.82, 1.72);
-  g.rotation.y = -Math.PI / 2;
-  box(g, 0.92, 0.7, 0.05, M(C.ink), 0, 1.08, 0.02);
-  plane(g, 0.82, 0.58, Basic(0xffffff, { map: caTex }), 0, 1.43, 0.048);
-  hitbox(g, 1.1, 0.9, 0.45, 0, 1.05, 0.12);
+  const g = group(8.58, 1.75);
+  g.rotation.y = Math.PI / 2;
+  box(g, 0.86, 0.62, 0.04, M(C.ink), 0, 1.12, 0.02);
+  plane(g, 0.76, 0.5, Basic(0xffffff, { map: caTex, side: THREE.DoubleSide }), 0, 1.43, 0.044);
+  hitbox(g, 1.0, 0.8, 0.28, 0, 1.08, 0.1);
   return interactive("ca", g, {
     prompt: () => "Copy the contract address",
     action(api) {
