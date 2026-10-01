@@ -9,7 +9,7 @@ const config = {
 
   email: "",
   links: [],
-  ca: "5bhJw8tdHFFGqxAajtPJ51EikXJk2GVtZxLgT6D9pump",
+  ca: "BuZLeENGgL8mjYZxBv2YJH1jemtfrJpmmUce8wFdpump",
 
   projects: [
     { title: "Pull the Plug", tag: "Rite", desc: "The dark is scheduled. You do not ask who did it." },
